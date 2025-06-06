@@ -5,6 +5,8 @@ import (
     "demo_go_clean_architecutre/internal/entity"
 )
 
+var ErrEmptyTitle = errors.New("task title cannot be empty")
+
 type MemoryTaskRepository struct {
     tasks  []entity.Task
     nextID int
@@ -23,7 +25,7 @@ func (r *MemoryTaskRepository) GetTasks() ([]entity.Task, error) {
 
 func (r *MemoryTaskRepository) CreateTask(task entity.Task) error {
     if task.Title == "" {
-        return errors.New("task title cannot be empty")
+        return ErrEmptyTitle
     }
     task.ID = r.nextID
     r.nextID++

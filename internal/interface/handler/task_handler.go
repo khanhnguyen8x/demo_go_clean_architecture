@@ -2,11 +2,12 @@ package handler
 
 import (
     "encoding/json"
+    "errors"
     "io/ioutil"
     "net/http"
-    "strings"
 
     "demo_go_clean_architecutre/internal/entity"
+    "demo_go_clean_architecutre/internal/infrastructure/repository"
     "demo_go_clean_architecutre/internal/usecase"
 )
 
@@ -58,7 +59,7 @@ func (h *TaskHandler) handleCreateTask(w http.ResponseWriter, r *http.Request) {
     }
     err = h.usecase.CreateTask(task)
     if err != nil {
-        if strings.Contains(err.Error(), "cannot be empty") {
+        if errors.Is(err, repository.ErrEmptyTitle) {
             http.Error(w, err.Error(), http.StatusBadRequest)
         } else {
             http.Error(w, err.Error(), http.StatusInternalServerError)
