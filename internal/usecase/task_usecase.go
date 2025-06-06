@@ -10,6 +10,11 @@ type TaskRepository interface {
     CreateTask(task entity.Task) error
 }
 
+type TaskUseCaseInterface interface {
+	GetTasks() ([]entity.Task, error)
+	CreateTask(task entity.Task) error
+}
+
 type TaskUseCase struct {
     repo TaskRepository
 }
