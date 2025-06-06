@@ -1,6 +1,7 @@
 package repository
 
 import (
+    "errors"
     "demo_go_clean_architecutre/internal/entity"
 )
 
@@ -21,6 +22,9 @@ func (r *MemoryTaskRepository) GetTasks() ([]entity.Task, error) {
 }
 
 func (r *MemoryTaskRepository) CreateTask(task entity.Task) error {
+    if task.Title == "" {
+        return errors.New("task title cannot be empty")
+    }
     task.ID = r.nextID
     r.nextID++
     r.tasks = append(r.tasks, task)

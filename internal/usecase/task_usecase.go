@@ -1,6 +1,9 @@
 package usecase
 
-import "demo_go_clean_architecutre/internal/entity"
+import (
+    "demo_go_clean_architecutre/internal/entity"
+    "fmt"
+)
 
 type TaskRepository interface {
     GetTasks() ([]entity.Task, error)
@@ -20,5 +23,8 @@ func (u *TaskUseCase) GetTasks() ([]entity.Task, error) {
 }
 
 func (u *TaskUseCase) CreateTask(task entity.Task) error {
-    return u.repo.CreateTask(task)
+    if err := u.repo.CreateTask(task); err != nil {
+        return fmt.Errorf("failed to create task: %w", err)
+    }
+    return nil
 }

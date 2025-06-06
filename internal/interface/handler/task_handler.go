@@ -4,6 +4,7 @@ import (
     "encoding/json"
     "io/ioutil"
     "net/http"
+    "strings"
 
     "demo_go_clean_architecutre/internal/entity"
     "demo_go_clean_architecutre/internal/usecase"
@@ -57,7 +58,11 @@ func (h *TaskHandler) handleCreateTask(w http.ResponseWriter, r *http.Request) {
     }
     err = h.usecase.CreateTask(task)
     if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
+        if strings.Contains(err.Error(), "cannot be empty") {
+            http.Error(w, err.Error(), http.StatusBadRequest)
+        } else {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+        }
         return
     }
     w.WriteHeader(http.StatusCreated)
